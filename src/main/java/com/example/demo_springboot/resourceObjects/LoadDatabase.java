@@ -19,26 +19,26 @@ class LoadDatabase {
 
     @Bean
     CommandLineRunner initDatabase(BatteryRepository batteryRepository) {
-        // if (batteryRepository.count() == 0) {
-        //     return args -> {
-        //         ObjectMapper mapper = new ObjectMapper();
-        //         TypeReference<List<Battery>> typeRef = new TypeReference<List<Battery>>() {};
+        if (batteryRepository.count() == 0) {
+            return args -> {
+                ObjectMapper mapper = new ObjectMapper();
+                TypeReference<List<Battery>> typeRef = new TypeReference<List<Battery>>() {};
 
-        //         InputStream inputStream = getClass().getResourceAsStream("/batteries.json");
-        //         if (inputStream == null) {
-        //             log.error("Could not find batteries.json in classpath!");
-        //             return;
-        //         }
+                InputStream inputStream = getClass().getResourceAsStream("/batteries.json");
+                if (inputStream == null) {
+                    log.error("Could not find batteries.json in classpath!");
+                    return;
+                }
 
-        //         List<Battery> batteries = mapper.readValue(inputStream, typeRef);
-        //         batteryRepository.saveAll(batteries);
+                List<Battery> batteries = mapper.readValue(inputStream, typeRef);
+                batteryRepository.saveAll(batteries);
 
-        //         batteries.forEach(b -> log.info("Preloaded: " + b));
-        //     };
-        // }
-        // else {
+                batteries.forEach(b -> log.info("Preloaded: " + b));
+            };
+        }
+        else {
             log.info("Battery table already has data. Skipping preload.");
             return args -> {};
-        // }
+        }
     }
 }
